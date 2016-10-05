@@ -14,12 +14,17 @@ import java.util.List;
  */
 public class CoordinatesHandler{
     Integer[][] CoordinatesValue = new Integer[1024][512];
+    double lonInc = 2.844;
+    double latInc = 2.844;
+
     BufferedReader r;
 
     public CoordinatesHandler(BufferedReader reader){
         r = reader;
+        update();
 
     }
+    //comment
 
     public void update(){
         String line;
@@ -54,6 +59,19 @@ public class CoordinatesHandler{
 
     public Integer getProbability(Location l){
 
+        update();
+
+        double lat = l.getLatitude();
+        double lon = l.getLongitude();
+
+        int latProb = (int)Math.round(lat*latInc);
+        int lonProb = (int)Math.round(lon*lonInc);
+        Log.d("latProb", Integer.toString(latProb));
+        Log.d("lonProb", Integer.toString(lonProb));
+
         return 1;
+
     }
+
+
 }

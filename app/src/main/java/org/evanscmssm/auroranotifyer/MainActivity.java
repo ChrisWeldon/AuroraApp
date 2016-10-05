@@ -1,6 +1,7 @@
 package org.evanscmssm.auroranotifyer;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,6 +9,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -54,6 +57,12 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                     .addApi(LocationServices.API)
                     .build();
         }
+
+        if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},1
+                    /*LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION*/);
+        }
     }
 
     protected void onStart(){
@@ -69,10 +78,15 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
     LocationRequest mLocationRequest;
 
-    TextView mLatitudeText, mLongitudeText;
+    //TextView mLatitudeText = (TextView)findViewById(R.id.latText);
+    //TextView mLongitudeText =(TextView)findViewById(R.id.lonText);;
     Location mLastLocation = null;
 
     String lat, lon;
+
+    public void updateLoc(View w){
+
+    }
 
     @Override
     public void onConnected(Bundle connectionHint){
@@ -91,21 +105,26 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 Log.d("Log", "Setting Text");
                 lat = String.valueOf(mLastLocation.getLatitude());
                 lon = String.valueOf(mLastLocation.getLongitude());
+                updateUI();
             }
         }catch(SecurityException e){
             Log.d("Log", "Security Exception");
         }
-        updateUI();
+
 
     }
+
+
 
     public void onLocationChanged(Location l){
         updateUI();
     }
 
     void updateUI() {
-        mLatitudeText.setText(lat);
-        mLongitudeText.setText(lon);
+        Log.d("Log", lat);
+        Log.d("Log", lon);
+        //mLatitudeText.setText(lat);
+        //mLongitudeText.setText(lon);
     }
 
 
@@ -190,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         }catch(IOException e) {
             return false;
         }finally
-         {
+        {
             if (is != null) {
                 try {
                     is.close();
