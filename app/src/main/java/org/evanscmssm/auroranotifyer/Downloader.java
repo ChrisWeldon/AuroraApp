@@ -27,16 +27,7 @@ public class Downloader {
         boolean handleStream(InputStream strm);
     }
 
-    public void downloadTxt(String url){
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            new DownloadWebpageTask().execute(url);
-        } else {
-            Log.d("Network","no network or something");
-        }
-    }
+
 
 
     private boolean downloadUrl(String myurl, StreamHandler stream){
@@ -101,6 +92,17 @@ public class Downloader {
             }
 
 
+        }
+    }
+
+    public void downloadURL(Context context, String url){
+        ConnectivityManager connMgr = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            new DownloadWebpageTask().execute(url);
+        } else {
+            Log.d("Network","no network or something");
         }
     }
 
