@@ -40,6 +40,8 @@ import com.google.android.gms.location.LocationSettingsResult;
 
 public class MainActivity extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
 
+
+    Downloader downloader;
     GoogleApiClient mGoogleApiClient = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        downloader = new Downloader();
 
         // Create an instance of GoogleAPIClient.
 
@@ -142,14 +145,16 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
     public void myHandler(View w){
 
-        ConnectivityManager connMgr = (ConnectivityManager)
+        downloader.downloadTxt("http://services.swpc.noaa.gov/text/aurora-nowcast-map.txt");
+
+        /*ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             new DownloadWebpageTask().execute("http://services.swpc.noaa.gov/text/aurora-nowcast-map.txt");
         } else {
             Log.d("Network","no network or something");
-        }
+        }*/
 
     }
 
