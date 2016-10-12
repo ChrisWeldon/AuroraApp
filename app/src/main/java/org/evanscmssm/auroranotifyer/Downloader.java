@@ -1,6 +1,7 @@
 package org.evanscmssm.auroranotifyer;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -17,20 +18,37 @@ import java.net.URL;
 /**
  * Created by chrisevans on 10/5/16.
  */
-public class Downloader {
+public class Downloader<Result> {
 
-    public void Downloader(){
+
+    public interface DownloadHandler<R>{
+        void onDownloadResult(R res);
+        void onDownloadError(int errorCode, String errormessage);
+    }
+
+    public interface StreamHandler<R>{
+        R handleStream(InputStream strm);
+    }
+
+
+    StreamHandler<Result> converter;
+    DownloadHandler<Result> handler;
+    Result data = null;
+
+    public Downloader(StreamHandler<Result> converter , DownloadHandler<Result> handler)
+    {
+        this.converter = converter;
+        this.handler = handler;
+    }
+
+
+    public void start(String url){
 
     }
 
-    public interface StreamHandler{
-        boolean handleStream(InputStream strm);
-    }
 
 
-
-
-    private boolean downloadUrl(String myurl, StreamHandler stream){
+    private boolean downloadUrl(String myurl){
         InputStream is = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
@@ -50,12 +68,16 @@ public class Downloader {
             is = conn.getInputStream();
 
             // Convert the InputStream into a string
-            String contentAsString = readIt(is, len);
-            return stream.handleStream(is);
+            //String contentAsString = readIt(is, len);
 
+            data = converter.handleStream(is);
+            handler.onDownloadResult(data);
+            return true;
             // Makes sure that the InputStream is closed after the app is
             // finished using it.
         }catch(IOException e) {
+            handler.onDownloadError(1, "Download Error");
+            Log.d("log", "IO Exception in download url");
             return false;
         }finally
         {
@@ -67,6 +89,7 @@ public class Downloader {
                 }
             }
         }
+
     }
 
     private class DownloadWebpageTask extends AsyncTask<String, Void, Boolean> {
@@ -74,12 +97,7 @@ public class Downloader {
         @Override
         protected Boolean doInBackground(String... urls) {
             // params comes from the execute() call: params[0] is the url.
-            return downloadUrl(urls[0], new StreamHandler() {
-                @Override
-                public boolean handleStream(InputStream strm) {
-                    return true;
-                }
-            });
+            return downloadUrl(urls[0]);
 
         }
         // onPostExecute displays the results of the AsyncTask.
@@ -106,12 +124,6 @@ public class Downloader {
         }
     }
 
-    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
-        BufferedReader reader   = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-
-        new CoordinatesHandler(reader).update();
 
 
-        return "hello";
-    }
 }

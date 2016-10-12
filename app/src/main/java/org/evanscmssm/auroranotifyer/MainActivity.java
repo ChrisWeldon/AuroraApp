@@ -3,9 +3,6 @@ package org.evanscmssm.auroranotifyer;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,26 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-
 
 public class MainActivity extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
 
@@ -49,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //downloader = new Downloader();
 
         // Create an instance of GoogleAPIClient.
 
@@ -62,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         }
 
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},1
                     /*LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION*/);
         }
@@ -145,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
     public void myHandler(View w){
 
-        downloader.downloadURL(this, "http://services.swpc.noaa.gov/text/aurora-nowcast-map.txt");
 
     }
 

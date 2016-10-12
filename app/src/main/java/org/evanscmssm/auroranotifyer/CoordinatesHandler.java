@@ -1,39 +1,39 @@
 package org.evanscmssm.auroranotifyer;
 
+import android.content.Context;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.text.NumberFormat;
 import java.util.List;
 
 /**
  * Created by chrisevans on 9/17/16.
  */
-public class CoordinatesHandler{
+public class CoordinatesHandler  {
     Integer[][] CoordinatesValue = new Integer[1024][512];
     double lonInc = 2.844;
     double latInc = 2.844;
 
-    BufferedReader r;
 
-    public CoordinatesHandler(BufferedReader reader){
-        r = reader;
-        update();
 
-    }
-    //comment
 
-    public void update(){
+    public void update(BufferedReader reader){
         String line;
         int y=0;
 
         while(true){
 
             try {
-                line = r.readLine();
+                line = reader.readLine();
 
                 if(line == null){
                     break;
@@ -57,9 +57,37 @@ public class CoordinatesHandler{
         }
     }
 
-    public Integer getProbability(Location l){
+    public static void download(Context context, String url, Downloader.DownloadHandler<CoordinatesHandler> handler){
+        ConnectivityManager connMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        update();
+        if (networkInfo != null && networkInfo.isConnected())
+        {
+            Log.d("Network", "I can talk to the world");
+
+            Downloader<CoordinatesHandler> downloader = new Downloader<CoordinatesHandler>(new Downloader.StreamHandler<CoordinatesHandler>() {
+                @Override
+                public CoordinatesHandler handleStream(InputStream strm) {
+                    CoordinatesHandler data = new CoordinatesHandler();
+                    try {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(strm, "UTF-8"));
+                        data.update(reader);
+                    }catch(UnsupportedEncodingException e){}
+                    return data;
+                }
+            }, handler);
+
+            downloader.start(url);
+        }
+        else
+        {
+            handler.onDownloadError(1, "Unable to connect to network");
+        }
+    }
+
+
+
+    public Integer getProbability(Location l){
 
         double lat = l.getLatitude();
         double lon = l.getLongitude();
