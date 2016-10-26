@@ -21,10 +21,12 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.Calendar;
+
 public class MainActivity extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
 
 
-    Downloader downloader;
+    AlarmService As;
     GoogleApiClient mGoogleApiClient = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +46,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         }
 
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},1
-                    /*LocationService.MY_PERMISSION_ACCESS_COURSE_LOCATION*/);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},1);
         }
     }
 
@@ -62,8 +63,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
     LocationRequest mLocationRequest;
 
-    //TextView mLatitudeText = (TextView)findViewById(R.id.latText);
-    //TextView mLongitudeText =(TextView)findViewById(R.id.lonText);;
+
     Location mLastLocation = null;
 
     String lat, lon;
@@ -107,8 +107,6 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     void updateUI() {
         Log.d("Log", lat);
         Log.d("Log", lon);
-        //mLatitudeText.setText(lat);
-        //mLongitudeText.setText(lon);
     }
 
 
@@ -124,9 +122,10 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         Log.d("Log", "Connection Failed");
     }
 
+
     public void myHandler(View w){
-
-
+        As = new AlarmService(this);
+        As.startAlarm();
     }
 
     @Override

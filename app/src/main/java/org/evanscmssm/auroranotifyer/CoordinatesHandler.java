@@ -97,6 +97,11 @@ public class CoordinatesHandler  {
         Log.d("latProb", Integer.toString(latProb));
         Log.d("lonProb", Integer.toString(lonProb));
 
+
+        /*
+        add the part that crosses location with fake data
+         */
+
         return 1;
 
     }
