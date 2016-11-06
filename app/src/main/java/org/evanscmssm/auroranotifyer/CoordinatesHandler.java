@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class CoordinatesHandler  {
     Integer[][] CoordinatesValue = new Integer[1024][512];
-    double lonInc = 2.844;
-    double latInc = 2.844;
+    private final double LON_INC = 0.3284671;
+    private final double LAT_INC = 0.3515625;
 
 
 
@@ -61,27 +61,30 @@ public class CoordinatesHandler  {
         ConnectivityManager connMgr = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
-        if (networkInfo != null && networkInfo.isConnected())
-        {
+        if (networkInfo != null && networkInfo.isConnected()) {
             Log.d("Network", "I can talk to the world");
 
             Downloader<CoordinatesHandler> downloader = new Downloader<CoordinatesHandler>(new Downloader.StreamHandler<CoordinatesHandler>() {
                 @Override
                 public CoordinatesHandler handleStream(InputStream strm) {
+
                     CoordinatesHandler data = new CoordinatesHandler();
                     try {
                         BufferedReader reader = new BufferedReader(new InputStreamReader(strm, "UTF-8"));
                         data.update(reader);
-                    }catch(UnsupportedEncodingException e){}
+                        Log.d("Log", "Buffered Reader Created");
+                    } catch (UnsupportedEncodingException e) {
+                        Log.d("error", "Unsupported Encoding Exception");
+                    }
                     return data;
                 }
             }, handler);
 
-            downloader.start(url);
-        }
-        else
-        {
-            handler.onDownloadError(1, "Unable to connect to network");
+            downloader.start(context, url);
+
+            {
+                handler.onDownloadError(1, "Unable to connect to network");
+            }
         }
     }
 
@@ -91,16 +94,45 @@ public class CoordinatesHandler  {
 
         double lat = l.getLatitude();
         double lon = l.getLongitude();
+        int latIndex;
+        int lonIndex;
+        //spoofing latatude and longitude for Fairbanks Alaska
+        lat = 64.842217;
+        lon =  -147.753461;
+        //should end up being lat:439 , lon:91
 
-        int latProb = (int)Math.round(lat*latInc);
-        int lonProb = (int)Math.round(lon*lonInc);
-        Log.d("latProb", Integer.toString(latProb));
-        Log.d("lonProb", Integer.toString(lonProb));
+        Log.d("lat", Double.toString(lat));
+        Log.d("lon", Double.toString(lon));
+
+        lat = lat + 90;
+        if(lat<0){
+            lat = 0;
+        }
+        //0 is row 0, and 180 is row 511
+
+        lon = lon +180;
+
+        if(lon<0){
+            lon = 0;
+        }
+        if(lon>360){
+            lon = 360;
+        }
 
 
-        /*
-        add the part that crosses location with fake data
-         */
+
+        Double t = new Double(511*lat / 180);
+        Double n = new Double(1023*lon/360);
+        latIndex = t.intValue();
+        lonIndex = n.intValue();
+
+        /*determining what the index is to get the probability*/
+
+        Log.d("Log","Got probability");
+        String probability = Integer.toString(CoordinatesValue[latIndex][lonIndex]);
+        Log.d("Probability",probability );
+
+
 
         return 1;
 

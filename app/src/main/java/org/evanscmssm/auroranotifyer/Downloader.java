@@ -42,9 +42,7 @@ public class Downloader<Result> {
     }
 
 
-    public void start(String url){
 
-    }
 
 
 
@@ -52,7 +50,6 @@ public class Downloader<Result> {
         InputStream is = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
-        int len = 500;
 
         try {
             URL url = new URL(myurl);
@@ -113,7 +110,7 @@ public class Downloader<Result> {
         }
     }
 
-    public void downloadURL(Context context, String url){
+    public void start(Context context, String url){
         ConnectivityManager connMgr = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();

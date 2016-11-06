@@ -4,7 +4,9 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -24,11 +26,13 @@ public class AuroraService extends IntentService implements Downloader.DownloadH
     @Override
     protected void onHandleIntent(Intent workIntent) {
         // Gets data from the incoming Intent
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         Log.d("Yay", "Aurora Service started!!");
-        String dataString = workIntent.getDataString();
         String url = workIntent.getStringExtra("URL");
-        Double lat = workIntent.getDoubleExtra(LAT_LOC, 0);
-        Double lon = workIntent.getDoubleExtra(LON_LOC, 0);
+        Double lat = MainActivity.getDouble(settings, "LAT", 8 );
+        Double lon = MainActivity.getDouble(settings, "LON", 8);
+        Log.d("onHandleIntent", "lat "+ lat );
+        Log.d("onHandleIntent", "lon "+ lon );
         CoordinatesHandler.download(this, url, this );
 
         targetLocation = new Location("Location");//provider name is unecessary

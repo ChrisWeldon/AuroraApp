@@ -1,9 +1,11 @@
 package org.evanscmssm.auroranotifyer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -66,7 +68,10 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
     Location mLastLocation = null;
 
-    String lat, lon;
+    String mlat, mlon;
+    double lat;
+    double lon;
+    SharedPreferences settings;
 
     public void updateLoc(View w){
 
@@ -87,8 +92,15 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
             if (mLastLocation != null) {
                 Log.d("Log", "Setting Text");
-                lat = String.valueOf(mLastLocation.getLatitude());
-                lon = String.valueOf(mLastLocation.getLongitude());
+                lat = mLastLocation.getLatitude();
+                lon = mLastLocation.getLongitude();
+                mlat = String.valueOf(lat);
+                mlon = String.valueOf(lon);
+                settings = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = settings.edit();
+                putDouble(editor, "LAT", lat );
+                putDouble(editor, "LON", lon );
+                editor.commit();
                 updateUI();
             }
         }catch(SecurityException e){
@@ -98,15 +110,33 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
 
     }
 
+    public static SharedPreferences.Editor putDouble(final SharedPreferences.Editor edit, final String key, final double value) {
+        return edit.putLong(key, Double.doubleToRawLongBits(value));
+    }
+
+    public static double getDouble(final SharedPreferences prefs, final String key, final double defaultValue) {
+        if ( !prefs.contains(key))
+            return defaultValue;
+
+        return Double.longBitsToDouble(prefs.getLong(key, 5));
+    }
+
+
 
 
     public void onLocationChanged(Location l){
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
+        putDouble(editor, "LAT", lat );
+        putDouble(editor, "LON", lon );
+        editor.commit();
         updateUI();
+
     }
 
     void updateUI() {
-        Log.d("Log", lat);
-        Log.d("Log", lon);
+        Log.d("Log", mlat);
+        Log.d("Log", mlon);
     }
 
 
