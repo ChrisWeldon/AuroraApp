@@ -21,7 +21,7 @@ public class AlarmService {
         Log.d("Yay", "Alarm Sent!!");
         //Set the alarm to 10 seconds from now
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.SECOND, 10);
+        c.add(Calendar.MINUTE, 30);
         long firstTime = c.getTimeInMillis();
         // Schedule the alarm!
         AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);

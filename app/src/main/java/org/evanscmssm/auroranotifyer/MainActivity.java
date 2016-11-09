@@ -1,6 +1,8 @@
 package org.evanscmssm.auroranotifyer;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -16,6 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -25,17 +29,25 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener{
 
 
     AlarmService As;
     GoogleApiClient mGoogleApiClient = null;
+    TextView textProb;
+    TextView textLat;
+    TextView textLon;
+    BroadcastReceiver probabilityReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        textProb = (TextView) findViewById(R.id.mProb);
+        textLat = (TextView) findViewById(R.id.mLat);
+        textLon = (TextView) findViewById(R.id.mLon);
 
         // Create an instance of GoogleAPIClient.
 
@@ -50,6 +62,15 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},1);
         }
+
+        probabilityReceiver = new BroadcastReceiver(){
+
+            public void onReceive(Context context, Intent intent){
+                Log.d("Main Activity", "Got Broadcast to get probability");
+                updateSettings();
+            }
+
+        };
     }
 
     protected void onStart(){
@@ -73,9 +94,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
     double lon;
     SharedPreferences settings;
 
-    public void updateLoc(View w){
 
-    }
 
     @Override
     public void onConnected(Bundle connectionHint){
@@ -101,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
                 putDouble(editor, "LAT", lat );
                 putDouble(editor, "LON", lon );
                 editor.commit();
-                updateUI();
+                updateSettings();
             }
         }catch(SecurityException e){
             Log.d("Log", "Security Exception");
@@ -130,13 +149,17 @@ public class MainActivity extends AppCompatActivity implements  GoogleApiClient.
         putDouble(editor, "LAT", lat );
         putDouble(editor, "LON", lon );
         editor.commit();
-        updateUI();
+        updateSettings();
 
     }
 
-    void updateUI() {
+    void updateSettings() {
         Log.d("Log", mlat);
         Log.d("Log", mlon);
+        textLat.setText(mlat);
+        textLon.setText(mlon);
+        textProb.setText(Integer.toString(settings.getInt("PROB", 50)));
+
     }
 
 

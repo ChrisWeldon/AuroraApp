@@ -15,13 +15,11 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         Log.d("Yay", "Alarm Received!!");
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+
 
 
         Intent startMain = new Intent(context, AuroraService.class);
-        startMain.putExtra("URL", "https://mssm-cs-c9121.firebaseapp.com/aurora-nowcast-fake.txt");
-        //startMain.putExtra("LAT", MainActivity.getDouble(settings, "LAT", 1 ));
-        //startMain.putExtra("LON", MainActivity.getDouble(settings, "LON", 1 ));
+        startMain.putExtra("URL", "http://services.swpc.noaa.gov/text/aurora-nowcast-map.txt");
 
         context.startService(startMain);
 

@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/aurora1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.evanscmssm.auroranotifyer.MainActivity"
     tools:showIn="@layout/activity_main">
@@ -18,37 +19,50 @@
         android:layout_height="wrap_content"
         android:text="myHandler"
         android:id="@+id/button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="79dp"
-        android:onClick="myHandler" />
+        android:onClick="myHandler"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="90dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/latText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/mProb"
+        android:layout_marginTop="38dp"
+        android:minHeight="100dp"
+        android:maxWidth="300dp"
+        android:textColor="#42e5f4"
+        android:textSize="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/lonText"
-        android:layout_below="@+id/latText" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/mLat"
+        android:minHeight="100dp"
+        android:maxWidth="300dp"
+        android:textColor="#42e5f4"
+        android:textSize="30dp"
+        android:layout_below="@+id/mProb"
+        android:layout_centerHorizontal="true" />
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Update Location"
-        android:id="@+id/updateBut"
-        android:layout_below="@+id/button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="updateLoc" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/mLon"
+        android:minHeight="60dp"
+        android:maxWidth="300dp"
+        android:textColor="#42e5f4"
+        android:textSize="30dp"
+        android:layout_alignBottom="@+id/mLat"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

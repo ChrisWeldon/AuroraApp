@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +23,8 @@ public class CoordinatesHandler  {
     Integer[][] CoordinatesValue = new Integer[1024][512];
     private final double LON_INC = 0.3284671;
     private final double LAT_INC = 0.3515625;
+
+
 
 
 
@@ -134,7 +137,7 @@ public class CoordinatesHandler  {
 
 
 
-        return 1;
+        return CoordinatesValue[latIndex][lonIndex];
 
     }
 

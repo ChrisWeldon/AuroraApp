@@ -18,7 +18,9 @@ public class AuroraService extends IntentService implements Downloader.DownloadH
     private static final String LAT_LOC = "LAT";
     private static final String LON_LOC = "LON";
     private static final int NOTIFICATION_ID = 001;
+    AlarmService As;
     Location targetLocation;
+    SharedPreferences settings;
 
     public AuroraService() {
         super("EvansAuroraService");
@@ -26,7 +28,7 @@ public class AuroraService extends IntentService implements Downloader.DownloadH
     @Override
     protected void onHandleIntent(Intent workIntent) {
         // Gets data from the incoming Intent
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
         Log.d("Yay", "Aurora Service started!!");
         String url = workIntent.getStringExtra("URL");
         Double lat = MainActivity.getDouble(settings, "LAT", 8 );
@@ -39,23 +41,34 @@ public class AuroraService extends IntentService implements Downloader.DownloadH
         targetLocation.setLatitude(lat);//your coords of course
         targetLocation.setLongitude(lon);
 
+
     }
 
     public void onDownloadError(int code, String message){
         Log.d("Download error","There was a download error :( ");
+        Log.d("Error", message);
     }
 
     public void onDownloadResult(CoordinatesHandler coor){
-        Log.d("Yay", "There was a downlaod Result!!");
-        coor.getProbability(targetLocation);
 
+
+        Log.d("Yay", "There was a downlaod Result!!");
+
+        String probability = Integer.toString(coor.getProbability(targetLocation));
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.icon)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+                        .setContentTitle("Aurora Probablity")
+                        .setContentText(probability);
+
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("PROB", coor.getProbability(targetLocation) );
+        editor.commit();
 
         Intent resultIntent = new Intent(this, MainActivity.class);
+
+        As = new AlarmService(this);
+        As.startAlarm();
 
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
