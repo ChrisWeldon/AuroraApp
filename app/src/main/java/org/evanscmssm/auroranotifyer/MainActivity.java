@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         textLat = (TextView) findViewById(R.id.mLat);
         textLon = (TextView) findViewById(R.id.mLon);
 
+        // TODO add first time setup
+
         // Create an instance of GoogleAPIClient.
 
         if (mGoogleApiClient == null) {
@@ -93,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     double lat;
     double lon;
     SharedPreferences settings;
+
+
 
 
 
@@ -179,6 +183,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void myHandler(View w){
         As = new AlarmService(this);
         As.startAlarm();
+    }
+    public void settings(View w){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+
     }
 
     @Override

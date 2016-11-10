@@ -23,10 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".AuroraService"
-            android:exported="false"/>
-        <receiver android:process=":remote" android:name="AlarmReceiver"></receiver>
+            android:exported="false" />
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:process=":remote" />
+
+        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>

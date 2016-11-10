@@ -67,6 +67,7 @@ public class AuroraService extends IntentService implements Downloader.DownloadH
 
         Intent resultIntent = new Intent(this, MainActivity.class);
 
+        // TODO add smarter alarm notifying and setting
         As = new AlarmService(this);
         As.startAlarm();
 

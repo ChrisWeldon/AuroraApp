@@ -1,0 +1,21 @@
+package org.evanscmssm.auroranotifyer;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+
+public class SettingsActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+
+        // TODO work on settings
+    }
+
+    public void close(View v){
+        this.finish();
+    }
+
+}

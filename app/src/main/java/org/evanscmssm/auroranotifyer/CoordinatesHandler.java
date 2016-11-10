@@ -129,6 +129,8 @@ public class CoordinatesHandler  {
         latIndex = t.intValue();
         lonIndex = n.intValue();
 
+        // TODO make probablity a blur grid so its more accurate for the field of view
+
         /*determining what the index is to get the probability*/
 
         Log.d("Log","Got probability");

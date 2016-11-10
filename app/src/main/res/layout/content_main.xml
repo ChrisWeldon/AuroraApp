@@ -64,5 +64,18 @@
         android:layout_alignBottom="@+id/mLat"
         android:layout_centerHorizontal="true" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="settings"
+        android:id="@+id/settings"
+        android:layout_above="@+id/button"
+        android:layout_alignLeft="@+id/button"
+        android:layout_alignStart="@+id/button"
+        android:onClick="settings"
+        android:layout_alignRight="@+id/button"
+        android:layout_alignEnd="@+id/button" />
+
 
 </RelativeLayout>
