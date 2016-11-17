@@ -1,0 +1,5 @@
+String "Alarm" : { "notify_interval"
+                "notify_smart"
+              }
+boolean ALOC (auto locate)
+integer ProbThresh:{ 0-100}

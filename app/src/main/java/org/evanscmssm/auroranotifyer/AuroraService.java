@@ -18,6 +18,7 @@ public class AuroraService extends IntentService implements Downloader.DownloadH
     private static final String LAT_LOC = "LAT";
     private static final String LON_LOC = "LON";
     private static final int NOTIFICATION_ID = 001;
+    int PROB_THRESHOLD;
     AlarmService As;
     Location targetLocation;
     SharedPreferences settings;
@@ -37,9 +38,10 @@ public class AuroraService extends IntentService implements Downloader.DownloadH
         Log.d("onHandleIntent", "lon "+ lon );
         CoordinatesHandler.download(this, url, this );
 
-        targetLocation = new Location("Location");//provider name is unecessary
+        targetLocation = new Location("Location");//provider name is unnecessary
         targetLocation.setLatitude(lat);//your coords of course
         targetLocation.setLongitude(lon);
+        PROB_THRESHOLD = settings.getInt("ProbThresh", 50); // threshold preference
 
 
     }
@@ -49,42 +51,80 @@ public class AuroraService extends IntentService implements Downloader.DownloadH
         Log.d("Error", message);
     }
 
-    public void onDownloadResult(CoordinatesHandler coor){
+    public void onDownloadResult(CoordinatesHandler coor) {
+
+        Log.d("Log", "there was a download result");
+
+        if (settings.getString("ALARM", "notify_interval") == "notify_interval") {
+
+            String probability = Integer.toString(coor.getProbability(targetLocation));
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.icon)
+                            .setContentTitle("Aurora Probablity")
+                            .setContentText(probability);
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("PROB", coor.getProbability(targetLocation));
+            if (!settings.contains("PROB")) {
+                Log.d("Error", "PROB doesn't exist");
+            }
+            editor.commit();
+
+            Intent resultIntent = new Intent(this, MainActivity.class);
+
+            As = new AlarmService(this);
+            As.startAlarm();
+
+            PendingIntent resultPendingIntent =
+                    PendingIntent.getActivity(
+                            this,
+                            0,
+                            resultIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
+            mBuilder.setContentIntent(resultPendingIntent);
+
+            NotificationManager mNotifyMgr =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            mNotifyMgr.notify(NOTIFICATION_ID, mBuilder.build());
+
+        }else if(settings.getString("ALARM", "notify_interval")== "notify_smart" && coor.getProbability(targetLocation) >= PROB_THRESHOLD){
+
+            String probability = Integer.toString(coor.getProbability(targetLocation));
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(this)
+                            .setSmallIcon(R.drawable.icon)
+                            .setContentTitle("Aurora Probablity")
+                            .setContentText(probability);
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("PROB", coor.getProbability(targetLocation));
+            if (!settings.contains("PROB")) {
+                Log.d("Error", "PROB doesn't exist");
+            }
+            editor.commit();
+
+            Intent resultIntent = new Intent(this, MainActivity.class);
+
+            PendingIntent resultPendingIntent =
+                    PendingIntent.getActivity(
+                            this,
+                            0,
+                            resultIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+
+            mBuilder.setContentIntent(resultPendingIntent);
+
+            NotificationManager mNotifyMgr =
+                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+            mNotifyMgr.notify(NOTIFICATION_ID, mBuilder.build());
 
 
-        Log.d("Yay", "There was a downlaod Result!!");
-
-        String probability = Integer.toString(coor.getProbability(targetLocation));
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.icon)
-                        .setContentTitle("Aurora Probablity")
-                        .setContentText(probability);
-
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putInt("PROB", coor.getProbability(targetLocation) );
-        editor.commit();
-
-        Intent resultIntent = new Intent(this, MainActivity.class);
-
-        // TODO add smarter alarm notifying and setting
-        As = new AlarmService(this);
-        As.startAlarm();
-
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        0,
-                        resultIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-
-        mBuilder.setContentIntent(resultPendingIntent);
-
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        mNotifyMgr.notify(NOTIFICATION_ID, mBuilder.build());
-
+        }
     }
 }

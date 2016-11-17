@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">AuroraNotifyer</string>
     <string name="action_settings">Settings</string>
+    <string-array name="notifysettings_array">
+        <item>repeat alarm on interval</item>
+        <item>notify based off probability</item>
+        <item>no notifications</item>
+    </string-array>
+    <string name="title_activity_settings1">Settings</string>
+    <string name="pref_title_autoUpdate">Auto-Update Location</string>
+    <string name="pref_lat_input">Latitude</string>
+    <string name="pref_lon_input">Longitude</string>
+    <string name="pref_header_notify">Notifications</string>
+
+
+
 </resources>

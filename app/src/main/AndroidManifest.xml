@@ -32,7 +32,7 @@
             android:name=".AlarmReceiver"
             android:process=":remote" />
 
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
     </application>
 
 </manifest>

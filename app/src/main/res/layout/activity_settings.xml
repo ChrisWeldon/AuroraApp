@@ -22,39 +22,99 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView"
+        android:id="@+id/editLat"
+        android:layout_toRightOf="@+id/LatView"
+        android:layout_toEndOf="@+id/LatView"
         android:layout_marginLeft="39dp"
         android:layout_marginStart="39dp"
-        android:minWidth="100dp" />
+        android:minWidth="200dp"
+        android:textSize="20dp"
+        android:hint="00.0000" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Latitude"
-        android:id="@+id/textView"
-        android:layout_alignBottom="@+id/editText"
-        android:layout_alignRight="@+id/button2"
-        android:layout_alignEnd="@+id/button2" />
+        android:id="@+id/LatView"
+        android:textSize="35dp"
+        android:layout_alignBottom="@+id/editLat"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Longitude"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/textView"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView" />
+        android:id="@+id/LonView"
+        android:layout_below="@+id/LatView"
+        android:layout_alignLeft="@+id/LatView"
+        android:layout_alignStart="@+id/LatView"
+        android:textSize="35dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:layout_alignBottom="@+id/textView2"
-        android:layout_centerHorizontal="true"
-        android:minWidth="100dp" />
+        android:id="@+id/editLon"
+        android:minWidth="200dp"
+        android:layout_alignBottom="@+id/LonView"
+        android:layout_alignLeft="@+id/editLat"
+        android:layout_alignStart="@+id/editLat"
+        android:hint="00.0000"
+        android:textSize="20dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Location"
+        android:id="@+id/getLoc"
+        android:layout_below="@+id/LonView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/alarmChoice"
+        android:layout_below="@+id/Alarm_choice"
+        android:layout_alignLeft="@+id/Alarm_choice"
+        android:layout_alignStart="@+id/Alarm_choice" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Alarm Choice"
+        android:id="@+id/Alarm_choice"
+        android:layout_below="@+id/getLoc"
+        android:layout_alignLeft="@+id/getLoc"
+        android:layout_alignStart="@+id/getLoc"
+        android:textSize="30dp" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="apply"
+        android:id="@+id/applyButton"
+        android:layout_alignTop="@+id/button2"
+        android:layout_toLeftOf="@+id/alarmChoice"
+        android:minWidth="100dp"
+        android:layout_toRightOf="@+id/button2"
+        android:layout_toEndOf="@+id/button2"
+        android:onClick="apply" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Auto-Update Location"
+        android:id="@+id/switch1"
+        android:layout_alignLeft="@+id/editLon"
+        android:layout_alignStart="@+id/editLon"
+        android:layout_alignTop="@+id/getLoc"
+        android:layout_alignBottom="@+id/getLoc"
+        android:layout_alignRight="@+id/editLon"
+        android:layout_alignEnd="@+id/editLon"/>
+
 </RelativeLayout>

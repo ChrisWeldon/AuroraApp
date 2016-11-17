@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="ALOC"
+        android:title="@string/pref_title_autoUpdate" />
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="number"
+        android:defaultValue="00.00000"
+        android:key="LAT"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_lat_input" />
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:inputType="number"
+        android:defaultValue="00.00000"
+        android:key="LON"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_lon_input" />
+
+</PreferenceScreen>

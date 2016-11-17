@@ -102,32 +102,34 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(Bundle connectionHint){
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
 
-        try {
-            mLocationRequest = LocationRequest.create();
-            mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            mLocationRequest.setInterval(10000); // Update location every second
+        if(settings.getBoolean("ALOC", false) == true) {
+            try {
+                mLocationRequest = LocationRequest.create();
+                mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                mLocationRequest.setInterval(10000); // Update location every second
 
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest,this);
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
-            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    mGoogleApiClient);
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                        mGoogleApiClient);
 
-            if (mLastLocation != null) {
-                Log.d("Log", "Setting Text");
-                lat = mLastLocation.getLatitude();
-                lon = mLastLocation.getLongitude();
-                mlat = String.valueOf(lat);
-                mlon = String.valueOf(lon);
-                settings = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = settings.edit();
-                putDouble(editor, "LAT", lat );
-                putDouble(editor, "LON", lon );
-                editor.commit();
-                updateSettings();
+                if (mLastLocation != null) {
+                    Log.d("Log", "Setting Text");
+                    lat = mLastLocation.getLatitude();
+                    lon = mLastLocation.getLongitude();
+                    mlat = String.valueOf(lat);
+                    mlon = String.valueOf(lon);
+                    putDouble(editor, "LAT", lat);
+                    putDouble(editor, "LON", lon);
+                    editor.commit();
+                    updateSettings();
+                }
+            } catch (SecurityException e) {
+                Log.d("Log", "Security Exception");
             }
-        }catch(SecurityException e){
-            Log.d("Log", "Security Exception");
         }
 
 
@@ -148,12 +150,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 
     public void onLocationChanged(Location l){
-        settings = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = settings.edit();
-        putDouble(editor, "LAT", lat );
-        putDouble(editor, "LON", lon );
-        editor.commit();
-        updateSettings();
+        if(settings.contains("ALOC")&& settings.getBoolean("ALOC", false) == true) {
+            settings = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = settings.edit();
+            putDouble(editor, "LAT", lat );
+            putDouble(editor, "LON", lon );
+            editor.commit();
+            updateSettings();
+        }
 
     }
 
@@ -200,15 +204,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("Log", "onOptionsItemSelected called");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+            Log.d("onOptionsSelected", "id = action_settings");
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+
 
         return super.onOptionsItemSelected(item);
     }

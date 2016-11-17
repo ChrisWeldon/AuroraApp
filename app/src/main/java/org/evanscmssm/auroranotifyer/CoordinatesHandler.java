@@ -100,8 +100,8 @@ public class CoordinatesHandler  {
         int latIndex;
         int lonIndex;
         //spoofing latatude and longitude for Fairbanks Alaska
-        lat = 64.842217;
-        lon =  -147.753461;
+        //lat = 64.842217;
+        //lon =  -147.753461;
         //should end up being lat:439 , lon:91
 
         Log.d("lat", Double.toString(lat));
